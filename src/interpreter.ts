@@ -79,23 +79,40 @@ type Instruction =
 
 function parseInstruction(instructionString: string): Instruction {
     const [command, registerName, other] = instructionString.split(" ");
+    if (!isValidRegisterName(registerName)) {
+        throw new Error(
+            "invalid register name" +
+                registerName +
+                " in instruction " +
+                instructionString
+        );
+    }
+
     switch (command) {
         case "mov":
+            const sourceRegOrValue: number | RegisterName = isNaN(
+                parseInt(other)
+            )
+                ? parseRegisterNameOrFail(other)
+                : parseInt(other);
+
             return {
                 command,
-                toRegister: registerName as RegisterName,
-                sourceRegOrValue: isNaN(parseInt(other))
-                    ? (other as RegisterName)
-                    : parseInt(other),
+                toRegister: registerName,
+                sourceRegOrValue,
             };
         case "inc":
-            return { command, registerName: registerName as RegisterName };
+            if (!isValidRegisterName(registerName)) {
+                throw new Error("invalid registerName: " + registerName);
+            }
+            return { command, registerName: registerName };
+
         case "dec":
-            return { command, registerName: registerName as RegisterName };
+            return { command, registerName };
         case "jnz":
             return {
                 command,
-                registerName: registerName as RegisterName,
+                registerName: registerName,
                 offset: parseInt(other),
             };
         default:
@@ -104,6 +121,7 @@ function parseInstruction(instructionString: string): Instruction {
             );
     }
 }
+
 function execute(instruction: Instruction, registers: Registers): number {
     switch (instruction.command) {
         case "mov":
@@ -149,6 +167,23 @@ function interpret(programInstructions: string[]): Registers {
     return registers;
 }
 
+function isValidRegisterName(candidate: string): candidate is RegisterName {
+    if (candidate.length !== 1) {
+        return false;
+    }
+    const firstChar: string = candidate.charAt(0);
+    if (firstChar < "a" || firstChar > "z") {
+        return false;
+    }
+    return true;
+}
+
+function parseRegisterNameOrFail(candidate: string): RegisterName {
+    if (isValidRegisterName(candidate)) {
+        return candidate;
+    }
+    throw new Error("invalid register name: " + candidate);
+}
 // interpret(["mov a -10", "mov b a", "inc a", "dec b", "jnz a -2"]);
 // should yield { a: 0, b: -20 }
 
