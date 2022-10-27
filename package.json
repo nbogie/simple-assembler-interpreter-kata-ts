@@ -1,0 +1,15 @@
+{
+  "name": "foo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "nbogie <neillbogie@googlemail.com>",
+  "license": "MIT",
+  "devDependencies": {
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  },
+  "scripts": {
+    "start": "ts-node src/interpreter.ts",
+    "test": "jest"
+  }
+}
