@@ -84,10 +84,9 @@ function parseInstruction(instructionString: string): Instruction {
             return {
                 command,
                 toRegister: registerName as RegisterName,
-                sourceRegOrValue:
-                    parseInt(other) > 0
-                        ? parseInt(other)
-                        : (other as RegisterName),
+                sourceRegOrValue: isNaN(parseInt(other))
+                    ? (other as RegisterName)
+                    : parseInt(other),
             };
         case "inc":
             return { command, registerName: registerName as RegisterName };
@@ -105,9 +104,52 @@ function parseInstruction(instructionString: string): Instruction {
             );
     }
 }
+function execute(instruction: Instruction, registers: Registers): number {
+    switch (instruction.command) {
+        case "mov":
+            const v =
+                typeof instruction.sourceRegOrValue === "number"
+                    ? instruction.sourceRegOrValue
+                    : registers[instruction.sourceRegOrValue];
+            registers[instruction.toRegister] = v;
+            return 1;
+        case "inc":
+            registers[instruction.registerName] += 1;
+            return 1;
+        case "dec":
+            registers[instruction.registerName] -= 1;
+            return 1;
+        case "jnz":
+            if (registers[instruction.registerName] === 0) {
+                return 1;
+            } else {
+                return instruction.offset;
+            }
+    }
+}
 
 function interpret(programInstructions: string[]): Registers {
     const instructions = programInstructions.map(parseInstruction);
     console.log({ instructions });
-    return {};
+
+    const registers: Registers = {};
+    let instructionPointer: number = 0;
+    let counter = 0;
+    while (instructionPointer < instructions.length && counter++ < 100) {
+        const instruction: Instruction = instructions[instructionPointer];
+        let instructionPointerOffset = execute(instruction, registers);
+        instructionPointer += instructionPointerOffset;
+        console.log("executed ", {
+            instruction,
+            registers,
+            instructionPointerOffset,
+            instructionPointer,
+        });
+    }
+    return registers;
 }
+
+// interpret(["mov a 5", "inc a", "dec a", "dec a", "jnz a -1", "inc a"]);
+interpret(["mov a -10", "mov b a", "inc a", "dec b", "jnz a -2"]);
+
+export { interpret };
