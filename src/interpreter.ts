@@ -152,4 +152,4 @@ function interpret(programInstructions: string[]): Registers {
 // interpret(["mov a 5", "inc a", "dec a", "dec a", "jnz a -1", "inc a"]);
 interpret(["mov a -10", "mov b a", "inc a", "dec b", "jnz a -2"]);
 
-export { interpret };
+export { interpret, execute, Registers };
