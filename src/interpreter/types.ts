@@ -3,11 +3,16 @@ export type RegisterName = string;
 export type Registers = { [key: RegisterName]: number };
 
 export type ProgramCounter = number;
+export type ProgramCounterOffset = number;
 
 export type Instruction =
     | { command: "dec"; registerName: RegisterName }
     | { command: "inc"; registerName: RegisterName }
-    | { command: "jnz"; registerName: RegisterName; offset: number }
+    | {
+          command: "jnz";
+          registerName: RegisterName;
+          offset: ProgramCounterOffset;
+      }
     | {
           command: "mov";
           toRegister: RegisterName;
