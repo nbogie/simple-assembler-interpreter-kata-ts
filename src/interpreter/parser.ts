@@ -9,7 +9,9 @@ import { assert } from "./utils";
  * @param instructionString The string to parse
  * @returns an Instruction object representing the parsed instruction
  */
-export function parseInstruction(instructionString: string): Instruction {
+export function parseInstruction(
+    instructionString: string
+): Readonly<Instruction> {
     //Instruction string format = cmd registerName [registerName | number]
     const [command, registerName, arg3] = instructionString.split(" ");
 
