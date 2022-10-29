@@ -1,7 +1,10 @@
 import { Instruction, RegisterName } from "./types";
 
 export function parseInstruction(instructionString: string): Instruction {
-    const [command, registerName, other] = instructionString.split(" ");
+    //We note the second part of instruction is always a register name
+    //But the third part is variable
+    const [command, registerName, arg3] = instructionString.split(" ");
+
     if (!isValidRegisterName(registerName)) {
         throw new Error(
             "invalid register name" +
@@ -12,31 +15,23 @@ export function parseInstruction(instructionString: string): Instruction {
     }
 
     switch (command) {
-        case "mov":
-            const sourceRegOrValue: number | RegisterName = isNaN(
-                parseInt(other)
-            )
-                ? parseRegisterNameOrFail(other)
-                : parseInt(other);
-
-            return {
-                command,
-                toRegister: registerName,
-                sourceRegOrValue,
-            };
-        case "inc":
-            if (!isValidRegisterName(registerName)) {
-                throw new Error("invalid registerName: " + registerName);
-            }
-            return { command, registerName: registerName };
-
         case "dec":
+            return { command, registerName };
+        case "inc":
             return { command, registerName };
         case "jnz":
             return {
                 command,
                 registerName: registerName,
-                offset: parseInt(other),
+                offset: parseInt(arg3),
+            };
+        case "mov":
+            const sourceRegOrValue: number | RegisterName =
+                parseRegisterNameOrNumberOrFail(arg3);
+            return {
+                command,
+                toRegister: registerName,
+                sourceRegOrValue,
             };
         default:
             throw new Error(
@@ -61,4 +56,8 @@ function parseRegisterNameOrFail(candidate: string): RegisterName {
         return candidate;
     }
     throw new Error("invalid register name: " + candidate);
+}
+
+function parseRegisterNameOrNumberOrFail(str: string): number | RegisterName {
+    return isNaN(parseInt(str)) ? parseRegisterNameOrFail(str) : parseInt(str);
 }
