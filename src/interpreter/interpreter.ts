@@ -2,7 +2,10 @@ import { UnreachableCodeError } from "./utils";
 import { parseInstruction } from "./parser";
 import { Instruction, ProgramCounter, Registers } from "./types";
 
-function execute(instruction: Instruction, registers: Registers): number {
+function executeInstruction(
+    instruction: Instruction,
+    registers: Registers
+): number {
     switch (instruction.command) {
         case "mov":
             const v =
@@ -27,7 +30,8 @@ function execute(instruction: Instruction, registers: Registers): number {
                 return instruction.offset;
             }
         default:
-            //If we don't have exhaustive coverage of instruction.command possibles above, TS will complain here.
+            //If we don't have exhaustive coverage of instruction.command possibles above,
+            //then TS will complain here.
             throw new UnreachableCodeError(
                 instruction,
                 "Unhandled instruction command: " + JSON.stringify(instruction)
@@ -45,7 +49,10 @@ function interpret(programInstructions: string[]): Registers {
 
     while (programCounter < instructions.length) {
         const instruction: Instruction = instructions[programCounter];
-        let instructionPointerOffset = execute(instruction, registers);
+        let instructionPointerOffset = executeInstruction(
+            instruction,
+            registers
+        );
         programCounter += instructionPointerOffset;
     }
 
@@ -55,4 +62,4 @@ function interpret(programInstructions: string[]): Registers {
 // interpret(["mov a -10", "mov b a", "inc a", "dec b", "jnz a -2"]);
 // should yield { a: 0, b: -20 }
 
-export { interpret, execute, Registers };
+export { interpret, executeInstruction, Registers };
