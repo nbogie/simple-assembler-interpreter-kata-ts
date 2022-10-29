@@ -2,6 +2,8 @@ export type RegisterName = string;
 
 export type Registers = { [key: RegisterName]: number };
 
+export type ProgramCounter = number;
+
 export type Instruction =
     | { command: "dec"; registerName: RegisterName }
     | { command: "inc"; registerName: RegisterName }
