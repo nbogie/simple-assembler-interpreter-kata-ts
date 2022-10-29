@@ -1,4 +1,4 @@
-import { parseInstruction } from "./parser";
+import { isValidRegisterName, parseInstruction } from "./parser";
 import { Instruction } from "./types";
 
 test("all instructions can be parsed", function () {
@@ -14,6 +14,13 @@ test("all instructions can be parsed", function () {
         command: "inc",
         registerName: "a",
     });
+
+    expect(parseInstruction("inc tattoo")).toEqual({
+        command: "inc",
+        registerName: "tattoo",
+    });
+
+    expect(() => parseInstruction("inc tattoo7")).toThrowError();
 
     expect(parseInstruction("jnz a -2")).toEqual({
         command: "jnz",
@@ -93,4 +100,14 @@ test("Pointless extra test. Just for illustration", () => {
         },
     ];
     expect(inputLines.map(parseInstruction)).toEqual(expectedInstructions);
+});
+
+test("isValidRegisterName", () => {
+    expect(isValidRegisterName("a")).toBe(true);
+    expect(isValidRegisterName("X")).toBe(true);
+    expect(isValidRegisterName("hApPy")).toBe(true);
+
+    expect(isValidRegisterName("un-happy")).toBe(false);
+    expect(isValidRegisterName("3")).toBe(false);
+    expect(isValidRegisterName("a1")).toBe(false);
 });

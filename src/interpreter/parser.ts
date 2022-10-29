@@ -43,15 +43,10 @@ export function parseInstruction(instructionString: string): Instruction {
     }
 }
 
-function isValidRegisterName(candidate: string): candidate is RegisterName {
-    if (candidate.length !== 1) {
-        return false;
-    }
-    const firstChar: string = candidate.charAt(0);
-    if (firstChar < "a" || firstChar > "z") {
-        return false;
-    }
-    return true;
+export function isValidRegisterName(
+    candidate: string
+): candidate is RegisterName {
+    return candidate.match(/^[a-z]+$/i) !== null;
 }
 
 function parseRegisterNameOrFail(candidate: string): RegisterName {

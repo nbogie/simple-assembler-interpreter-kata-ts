@@ -1,4 +1,6 @@
-export type Registers = { [key: string]: number };
+export type RegisterName = string;
+
+export type Registers = { [key: RegisterName]: number };
 
 export type Instruction =
     | { command: "dec"; registerName: RegisterName }
@@ -10,30 +12,3 @@ export type Instruction =
           sourceRegOrValue: number | RegisterName;
           //We can do better. have two types of mov command, movReg, movNum?
       };
-
-export type RegisterName =
-    | "a"
-    | "b"
-    | "c"
-    | "d"
-    | "e"
-    | "f"
-    | "g"
-    | "h"
-    | "i"
-    | "j"
-    | "k"
-    | "l"
-    | "m"
-    | "n"
-    | "o"
-    | "p"
-    | "q"
-    | "s"
-    | "t"
-    | "u"
-    | "v"
-    | "w"
-    | "x"
-    | "y"
-    | "z";
