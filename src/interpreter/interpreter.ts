@@ -16,20 +16,21 @@ export function interpret(instructionStrings: string[]): Registers {
 
     while (programCounter < instructions.length) {
         const instruction = instructions[programCounter];
-        let programCounterOffset = executeInstruction(instruction, registers);
-        programCounter += programCounterOffset;
+        let pcOffsetOrNull = executeInstruction(instruction, registers);
+        programCounter += pcOffsetOrNull ?? 1;
     }
 
     return registers;
 }
 
-// interpret(["mov a -10", "mov b a", "inc a", "dec b", "jnz a -2"]);
-// should yield { a: 0, b: -20 }
-
+/**
+ * Execute a single given Instruction, generally mutating the given registers object.
+ * @returns either an offset to be made to the program counter, or null if program should advance as normal
+ * */
 export function executeInstruction(
     instruction: Instruction,
     registers: Registers
-): number {
+): number | null {
     switch (instruction.command) {
         case "mov":
             const v =
@@ -37,19 +38,19 @@ export function executeInstruction(
                     ? instruction.sourceRegOrValue
                     : registers[instruction.sourceRegOrValue];
             registers[instruction.toRegister] = v;
-            return 1;
+            return null;
 
         case "inc":
             registers[instruction.registerName] += 1;
-            return 1;
+            return null;
 
         case "dec":
             registers[instruction.registerName] -= 1;
-            return 1;
+            return null;
 
         case "jnz":
             if (registers[instruction.registerName] === 0) {
-                return 1;
+                return null;
             } else {
                 return instruction.offset;
             }

@@ -31,7 +31,7 @@ describe("test executeInstruction", () => {
             regs
         );
 
-        expect(ipOffset).toEqual(1);
+        expect(ipOffset).toEqual(null);
         expect(regs).toEqual({ a: 5 });
     });
 
@@ -42,7 +42,7 @@ describe("test executeInstruction", () => {
             regs
         );
 
-        expect(ipOffset).toEqual(1);
+        expect(ipOffset).toEqual(null);
         expect(regs).toEqual({ a: 99, b: 99 });
     });
 
@@ -53,7 +53,7 @@ describe("test executeInstruction", () => {
             regs
         );
 
-        expect(ipOffset).toEqual(1);
+        expect(ipOffset).toEqual(null);
         expect(regs).toEqual({ a: 4, b: 100 });
     });
 
@@ -64,7 +64,7 @@ describe("test executeInstruction", () => {
             regs
         );
 
-        expect(ipOffset).toEqual(1);
+        expect(ipOffset).toEqual(null);
         expect(regs).toEqual({ a: 3, b: 99 });
     });
 
@@ -75,7 +75,7 @@ describe("test executeInstruction", () => {
             regs
         );
 
-        expect(ipOffset).toEqual(1);
+        expect(ipOffset).toEqual(null);
         expect(regs).toEqual({ a: 0, b: 100, c: 2 });
     });
 
