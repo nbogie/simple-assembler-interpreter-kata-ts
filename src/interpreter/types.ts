@@ -1,4 +1,16 @@
 export type Registers = { [key: string]: number };
+
+export type Instruction =
+    | { command: "dec"; registerName: RegisterName }
+    | { command: "inc"; registerName: RegisterName }
+    | { command: "jnz"; registerName: RegisterName; offset: number }
+    | {
+          command: "mov";
+          toRegister: RegisterName;
+          sourceRegOrValue: number | RegisterName;
+          //We can do better. have two types of mov command, movReg, movNum?
+      };
+
 export type RegisterName =
     | "a"
     | "b"
@@ -25,13 +37,3 @@ export type RegisterName =
     | "x"
     | "y"
     | "z";
-
-export type Instruction =
-    | {
-          command: "mov";
-          toRegister: RegisterName;
-          sourceRegOrValue: number | RegisterName; //we can do better
-      }
-    | { command: "inc"; registerName: RegisterName }
-    | { command: "dec"; registerName: RegisterName }
-    | { command: "jnz"; registerName: RegisterName; offset: number };

@@ -1,6 +1,12 @@
 import { Instruction, RegisterName } from "./types";
 import { assert } from "./utils";
 
+/** Parse one instruction from a string such as 'mov a -10'
+ * into a more structured representation - an Instruction.
+ *
+ * @param instructionString The string to parse
+ * @returns an Instruction object representing the parsed instruction
+ */
 export function parseInstruction(instructionString: string): Instruction {
     //We note the second part of instruction is always a register name
     //But the third part is variable
@@ -19,12 +25,11 @@ export function parseInstruction(instructionString: string): Instruction {
         case "jnz":
             return {
                 command,
-                registerName: registerName,
+                registerName,
                 offset: parseInt(arg3),
             };
         case "mov":
-            const sourceRegOrValue: number | RegisterName =
-                parseRegisterNameOrNumberOrFail(arg3);
+            const sourceRegOrValue = parseRegisterNameOrNumberOrFail(arg3);
             return {
                 command,
                 toRegister: registerName,
