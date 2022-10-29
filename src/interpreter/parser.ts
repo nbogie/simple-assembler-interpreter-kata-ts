@@ -1,18 +1,15 @@
 import { Instruction, RegisterName } from "./types";
+import { assert } from "./utils";
 
 export function parseInstruction(instructionString: string): Instruction {
     //We note the second part of instruction is always a register name
     //But the third part is variable
     const [command, registerName, arg3] = instructionString.split(" ");
 
-    if (!isValidRegisterName(registerName)) {
-        throw new Error(
-            "invalid register name" +
-                registerName +
-                " in instruction " +
-                instructionString
-        );
-    }
+    assert(
+        isValidRegisterName(registerName),
+        "invalid register name " + registerName + " in " + instructionString
+    );
 
     switch (command) {
         case "dec":
