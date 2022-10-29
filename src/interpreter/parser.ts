@@ -31,13 +31,14 @@ export function parseInstruction(
                 registerName,
                 offset: parseIntOrFail(arg3),
             };
-        case "mov":
+        case "mov": {
             const sourceRegOrValue = parseRegisterNameOrIntOrFail(arg3);
             return {
                 command,
                 toRegister: registerName,
                 sourceRegOrValue,
             };
+        }
         default:
             throw new Error(
                 "Unknown command when parsing instruction: " + instructionString

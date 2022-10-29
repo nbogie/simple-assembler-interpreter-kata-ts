@@ -16,7 +16,7 @@ export function interpret(instructionStrings: string[]): Registers {
 
     while (programCounter < instructions.length) {
         const instruction = instructions[programCounter];
-        let pcOffsetOrNull = executeInstruction(instruction, registers);
+        const pcOffsetOrNull = executeInstruction(instruction, registers);
         programCounter += pcOffsetOrNull ?? 1;
     }
 
@@ -32,14 +32,14 @@ export function executeInstruction(
     registers: Registers
 ): number | null {
     switch (instruction.command) {
-        case "mov":
+        case "mov": {
             const v =
                 typeof instruction.sourceRegOrValue === "number"
                     ? instruction.sourceRegOrValue
                     : registers[instruction.sourceRegOrValue];
             registers[instruction.toRegister] = v;
             return null;
-
+        }
         case "inc":
             registers[instruction.registerName] += 1;
             return null;
