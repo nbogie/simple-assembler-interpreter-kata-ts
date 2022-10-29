@@ -4,21 +4,20 @@ import { Instruction, ProgramCounter, Registers } from "./types";
 
 export { Registers };
 
-export function interpret(programInstructions: string[]): Registers {
+export { interpret as simple_assembler }; //codewars expected name
+
+export function interpret(instructionStrings: string[]): Registers {
+    //Validate and structure the instructions
     const instructions: Instruction[] =
-        programInstructions.map(parseInstruction);
+        instructionStrings.map(parseInstruction);
 
     const registers: Registers = {};
-
     let programCounter: ProgramCounter = 0;
 
     while (programCounter < instructions.length) {
-        const instruction: Instruction = instructions[programCounter];
-        let instructionPointerOffset = executeInstruction(
-            instruction,
-            registers
-        );
-        programCounter += instructionPointerOffset;
+        const instruction = instructions[programCounter];
+        let programCounterOffset = executeInstruction(instruction, registers);
+        programCounter += programCounterOffset;
     }
 
     return registers;
