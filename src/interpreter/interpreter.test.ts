@@ -24,7 +24,7 @@ describe("interpret()", () => {
 });
 
 describe("test executeInstruction", () => {
-    test("executeInstruction mov a <- 5 works", function () {
+    test("mov a <- 5 works", function () {
         const regs: Registers = {};
         const ipOffset = executeInstruction(
             { command: "mov", toRegister: "a", sourceRegOrValue: 5 },
@@ -35,7 +35,7 @@ describe("test executeInstruction", () => {
         expect(regs).toEqual({ a: 5 });
     });
 
-    test("executeInstruction mov a <- b works", function () {
+    test("mov a <- b works", function () {
         const regs: Registers = { b: 99 };
         const ipOffset = executeInstruction(
             { command: "mov", toRegister: "a", sourceRegOrValue: "b" },
@@ -46,7 +46,7 @@ describe("test executeInstruction", () => {
         expect(regs).toEqual({ a: 99, b: 99 });
     });
 
-    test("executeInstruction inc a", function () {
+    test("inc a", function () {
         const regs: Registers = { a: 3, b: 100 };
         const ipOffset = executeInstruction(
             { command: "inc", registerName: "a" },
@@ -57,7 +57,7 @@ describe("test executeInstruction", () => {
         expect(regs).toEqual({ a: 4, b: 100 });
     });
 
-    test("executeInstruction dec b", function () {
+    test("dec b", function () {
         const regs: Registers = { a: 3, b: 100 };
         const ipOffset = executeInstruction(
             { command: "dec", registerName: "b" },
@@ -68,7 +68,7 @@ describe("test executeInstruction", () => {
         expect(regs).toEqual({ a: 3, b: 99 });
     });
 
-    test("executeInstruction jnz c -5 does not jump when not zero", function () {
+    test("jnz c -5 does not jump when not zero", function () {
         const regs: Registers = { a: 0, b: 100, c: 2 };
         const ipOffset = executeInstruction(
             { command: "jnz", registerName: "a", offset: -5 },
@@ -79,7 +79,7 @@ describe("test executeInstruction", () => {
         expect(regs).toEqual({ a: 0, b: 100, c: 2 });
     });
 
-    test("executeInstruction jnz c -5 jumps when zero", function () {
+    test("jnz c -5 jumps when zero", function () {
         const regs: Registers = { a: 3, b: 100, c: 0 };
         const ipOffset = executeInstruction(
             { command: "jnz", registerName: "a", offset: -5 },
