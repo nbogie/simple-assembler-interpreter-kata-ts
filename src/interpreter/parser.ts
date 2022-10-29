@@ -22,7 +22,6 @@ export function parseInstruction(
 
     switch (command) {
         case "dec":
-            return { command, registerName };
         case "inc":
             return { command, registerName };
         case "jnz":
