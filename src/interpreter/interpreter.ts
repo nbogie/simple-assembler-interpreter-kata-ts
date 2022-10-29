@@ -32,20 +32,12 @@ export function executeInstruction(
     registers: Registers
 ): number | null {
     switch (instruction.command) {
-        case "mov": {
-            const v =
-                typeof instruction.sourceRegOrValue === "number"
-                    ? instruction.sourceRegOrValue
-                    : registers[instruction.sourceRegOrValue];
-            registers[instruction.toRegister] = v;
-            return null;
-        }
-        case "inc":
-            registers[instruction.registerName] += 1;
-            return null;
-
         case "dec":
             registers[instruction.registerName] -= 1;
+            return null;
+
+        case "inc":
+            registers[instruction.registerName] += 1;
             return null;
 
         case "jnz":
@@ -54,6 +46,16 @@ export function executeInstruction(
             } else {
                 return instruction.offset;
             }
+
+        case "mov": {
+            const v =
+                typeof instruction.sourceRegOrValue === "number"
+                    ? instruction.sourceRegOrValue
+                    : registers[instruction.sourceRegOrValue];
+            registers[instruction.toRegister] = v;
+            return null;
+        }
+
         default:
             //If we don't have exhaustive coverage of instruction.command possibles above,
             //then TS will complain here.
