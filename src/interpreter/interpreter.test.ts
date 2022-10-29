@@ -18,6 +18,17 @@ describe("interpret()", () => {
         ).toEqual({ a: 1 });
     });
 
+    expect(
+        interpret([
+            "mov a 5",
+            "jnz 1 3",
+            "jnz a -1",
+            "jnz 1 3",
+            "dec a",
+            "jnz 1 -3",
+        ])
+    ).toEqual({ a: 0 });
+
     test("with empty prog", function () {
         expect(interpret([])).toEqual({});
     });

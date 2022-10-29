@@ -15,7 +15,7 @@
     "typescript": "^4.8.4"
   },
   "scripts": {
-    "start": "ts-node src/main exampleFiles/example2.asm",
+    "start": "ts-node src/main exampleFiles/example3.asm",
     "test": "jest",
     "lint": "eslint src/**/*.ts"
   }
