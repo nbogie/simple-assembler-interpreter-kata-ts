@@ -1,4 +1,18 @@
-### Original brief from codewars
+# Simple assembler interpreter (kata solution in beginner TypeScript)
+
+A solution to this kata: [Simple assembler interpreter](https://www.codewars.com/kata/58e24788e24ddee28e000053)
+
+Avoids advanced TypeScript usage.
+
+Doesn't try to be short, rather tries to be clear and give type-safety around instructions and their arguments.
+
+Fails early on malformed instruction strings (with no contextual error reporting).
+
+### Limitations:
+
+doesn't support `jnz [num] [num]` only `jnz [reg] [num]`. I noticed this requirement late, and no test programs are given that utilise the latter.
+
+## Original brief from codewars
 
 [Simple assembler interpreter](https://www.codewars.com/kata/58e24788e24ddee28e000053) by [ShinuToki](https://www.codewars.com/users/ShinuToki).
 
