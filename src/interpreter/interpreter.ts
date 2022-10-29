@@ -2,7 +2,32 @@ import { UnreachableCodeError } from "./utils";
 import { parseInstruction } from "./parser";
 import { Instruction, ProgramCounter, Registers } from "./types";
 
-function executeInstruction(
+export { Registers };
+
+export function interpret(programInstructions: string[]): Registers {
+    const instructions: Instruction[] =
+        programInstructions.map(parseInstruction);
+
+    const registers: Registers = {};
+
+    let programCounter: ProgramCounter = 0;
+
+    while (programCounter < instructions.length) {
+        const instruction: Instruction = instructions[programCounter];
+        let instructionPointerOffset = executeInstruction(
+            instruction,
+            registers
+        );
+        programCounter += instructionPointerOffset;
+    }
+
+    return registers;
+}
+
+// interpret(["mov a -10", "mov b a", "inc a", "dec b", "jnz a -2"]);
+// should yield { a: 0, b: -20 }
+
+export function executeInstruction(
     instruction: Instruction,
     registers: Registers
 ): number {
@@ -38,28 +63,3 @@ function executeInstruction(
             );
     }
 }
-
-function interpret(programInstructions: string[]): Registers {
-    const instructions: Instruction[] =
-        programInstructions.map(parseInstruction);
-
-    const registers: Registers = {};
-
-    let programCounter: ProgramCounter = 0;
-
-    while (programCounter < instructions.length) {
-        const instruction: Instruction = instructions[programCounter];
-        let instructionPointerOffset = executeInstruction(
-            instruction,
-            registers
-        );
-        programCounter += instructionPointerOffset;
-    }
-
-    return registers;
-}
-
-// interpret(["mov a -10", "mov b a", "inc a", "dec b", "jnz a -2"]);
-// should yield { a: 0, b: -20 }
-
-export { interpret, executeInstruction, Registers };
