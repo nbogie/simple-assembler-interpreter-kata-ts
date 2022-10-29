@@ -1,5 +1,4 @@
 import { Instruction, RegisterName } from "./types";
-import { assert } from "./utils";
 
 /** Parse one instruction from a string such as 'mov a -10'
  * into a structured Instruction representation such as
@@ -13,27 +12,25 @@ export function parseInstruction(
     instructionString: string
 ): Readonly<Instruction> {
     //Instruction string format = cmd registerName [registerName | number]
-    const [command, registerName, arg3] = instructionString.split(" ");
-
-    assert(
-        isValidRegisterName(registerName),
-        "invalid register name " + registerName + " in " + instructionString
-    );
+    const [command, arg2, arg3] = instructionString.split(" ");
 
     switch (command) {
         case "dec":
         case "inc":
-            return { command, registerName };
+            return {
+                command,
+                registerName: parseRegisterNameOrFail(arg2),
+            };
         case "jnz":
             return {
                 command,
-                registerName,
+                testRegOrValue: parseRegisterNameOrIntOrFail(arg2),
                 offset: parseIntOrFail(arg3),
             };
         case "mov": {
             return {
                 command,
-                toRegister: registerName,
+                toRegister: parseRegisterNameOrFail(arg2),
                 sourceRegOrValue: parseRegisterNameOrIntOrFail(arg3),
             };
         }

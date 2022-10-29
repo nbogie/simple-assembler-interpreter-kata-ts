@@ -68,25 +68,48 @@ describe("test executeInstruction", () => {
         expect(regs).toEqual({ a: 3, b: 99 });
     });
 
-    test("jnz c -5 does not jump when not zero", function () {
-        const regs: Registers = { a: 0, b: 100, c: 2 };
-        const ipOffset = executeInstruction(
-            { command: "jnz", registerName: "a", offset: -5 },
-            regs
-        );
+    describe("jnz", () => {
+        test("jnz c -5 does not jump when not zero", function () {
+            const regs: Registers = { a: 0, b: 100, c: 2 };
+            const ipOffset = executeInstruction(
+                { command: "jnz", testRegOrValue: "a", offset: -5 },
+                regs
+            );
 
-        expect(ipOffset).toEqual(null);
-        expect(regs).toEqual({ a: 0, b: 100, c: 2 });
-    });
+            expect(ipOffset).toEqual(null);
+            expect(regs).toEqual({ a: 0, b: 100, c: 2 });
+        });
 
-    test("jnz c -5 jumps when zero", function () {
-        const regs: Registers = { a: 3, b: 100, c: 0 };
-        const ipOffset = executeInstruction(
-            { command: "jnz", registerName: "a", offset: -5 },
-            regs
-        );
+        test("jnz c -5 jumps when zero", function () {
+            const regs: Registers = { a: 3, b: 100, c: 0 };
+            const ipOffset = executeInstruction(
+                { command: "jnz", testRegOrValue: "a", offset: -5 },
+                regs
+            );
 
-        expect(ipOffset).toEqual(-5);
-        expect(regs).toEqual({ a: 3, b: 100, c: 0 });
+            expect(ipOffset).toEqual(-5);
+            expect(regs).toEqual({ a: 3, b: 100, c: 0 });
+        });
+        test("jnz 17 -5 jumps - constant given", function () {
+            const regs: Registers = { a: 3, b: 100, c: 0 };
+            const ipOffset = executeInstruction(
+                { command: "jnz", testRegOrValue: 17, offset: -5 },
+                regs
+            );
+
+            expect(ipOffset).toEqual(-5);
+            expect(regs).toEqual({ a: 3, b: 100, c: 0 });
+        });
+
+        test("jnz 0 -5 does not jump - zero constant given", function () {
+            const regs: Registers = { a: 3, b: 100, c: 0 };
+            const ipOffset = executeInstruction(
+                { command: "jnz", testRegOrValue: 0, offset: -5 },
+                regs
+            );
+
+            expect(ipOffset).toEqual(null);
+            expect(regs).toEqual({ a: 3, b: 100, c: 0 });
+        });
     });
 });

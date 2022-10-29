@@ -1,6 +1,6 @@
 import { UnreachableCodeError } from "./utils";
 import { parseInstruction } from "./parser";
-import { Instruction, ProgramCounter, Registers } from "./types";
+import { Instruction, ProgramCounter, RegisterName, Registers } from "./types";
 
 export { Registers };
 
@@ -41,10 +41,12 @@ export function executeInstruction(
             return null;
 
         case "jnz":
-            if (registers[instruction.registerName] === 0) {
-                return null;
-            } else {
+            if (
+                literalOrRegValue(instruction.testRegOrValue, registers) !== 0
+            ) {
                 return instruction.offset;
+            } else {
+                return null;
             }
 
         case "mov": {
@@ -64,4 +66,13 @@ export function executeInstruction(
                 "Unhandled instruction command: " + JSON.stringify(instruction)
             );
     }
+}
+
+function literalOrRegValue(
+    sourceRegOrValue: number | RegisterName,
+    registers: Registers
+): number {
+    return typeof sourceRegOrValue === "number"
+        ? sourceRegOrValue
+        : registers[sourceRegOrValue];
 }

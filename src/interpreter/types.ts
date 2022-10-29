@@ -4,13 +4,14 @@ export type Registers = { [key: RegisterName]: number };
 
 export type ProgramCounter = number;
 export type ProgramCounterOffset = number;
+export type Integer = number;
 
 export type Instruction =
     | { command: "dec"; registerName: RegisterName }
     | { command: "inc"; registerName: RegisterName }
     | {
           command: "jnz";
-          registerName: RegisterName;
+          testRegOrValue: Integer | RegisterName;
           offset: ProgramCounterOffset;
       }
     | {
