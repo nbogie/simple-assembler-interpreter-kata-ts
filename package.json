@@ -1,6 +1,6 @@
 {
-  "name": "foo",
-  "version": "1.0.0",
+  "name": "simple-interpreter-codewars-kata",
+  "version": "0.0.2",
   "main": "index.js",
   "author": "nbogie <neillbogie@googlemail.com>",
   "license": "MIT",

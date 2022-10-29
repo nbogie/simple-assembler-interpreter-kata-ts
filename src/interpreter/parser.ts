@@ -2,14 +2,15 @@ import { Instruction, RegisterName } from "./types";
 import { assert } from "./utils";
 
 /** Parse one instruction from a string such as 'mov a -10'
- * into a more structured representation - an Instruction.
+ * into a structured Instruction representation such as
+ * { command: "mov", toRegister: "a", sourceRegOrValue: -10 }
+ * or throw an error if the instruction is invalid.
  *
  * @param instructionString The string to parse
  * @returns an Instruction object representing the parsed instruction
  */
 export function parseInstruction(instructionString: string): Instruction {
-    //We note the second part of instruction is always a register name
-    //But the third part is variable
+    //Instruction string format = cmd registerName [registerName | number]
     const [command, registerName, arg3] = instructionString.split(" ");
 
     assert(
@@ -26,10 +27,10 @@ export function parseInstruction(instructionString: string): Instruction {
             return {
                 command,
                 registerName,
-                offset: parseInt(arg3),
+                offset: parseIntOrFail(arg3),
             };
         case "mov":
-            const sourceRegOrValue = parseRegisterNameOrNumberOrFail(arg3);
+            const sourceRegOrValue = parseRegisterNameOrIntOrFail(arg3);
             return {
                 command,
                 toRegister: registerName,
@@ -37,7 +38,7 @@ export function parseInstruction(instructionString: string): Instruction {
             };
         default:
             throw new Error(
-                "failed to parse instruction: " + instructionString
+                "Unknown command when parsing instruction: " + instructionString
             );
     }
 }
@@ -60,6 +61,16 @@ function parseRegisterNameOrFail(candidate: string): RegisterName {
     throw new Error("invalid register name: " + candidate);
 }
 
-function parseRegisterNameOrNumberOrFail(str: string): number | RegisterName {
-    return isNaN(parseInt(str)) ? parseRegisterNameOrFail(str) : parseInt(str);
+function parseRegisterNameOrIntOrFail(str: string): number | RegisterName {
+    return isNaN(parseInt(str))
+        ? parseRegisterNameOrFail(str)
+        : parseIntOrFail(str);
+}
+
+function parseIntOrFail(str: string): number {
+    const n = parseInt(str);
+    if (isNaN(n)) {
+        throw new Error("Expected number, got: " + str);
+    }
+    return n;
 }
