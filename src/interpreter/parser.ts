@@ -32,11 +32,10 @@ export function parseInstruction(
                 offset: parseIntOrFail(arg3),
             };
         case "mov": {
-            const sourceRegOrValue = parseRegisterNameOrIntOrFail(arg3);
             return {
                 command,
                 toRegister: registerName,
-                sourceRegOrValue,
+                sourceRegOrValue: parseRegisterNameOrIntOrFail(arg3),
             };
         }
         default:
