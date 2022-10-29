@@ -48,3 +48,31 @@ dec a
 jnz a -1
 inc a
 ```
+
+The above code will:
+
+-   set register a to 5,
+-   increase its value by 1,
+-   decrease its value by 2,
+-   then decrease its value until it is zero (jnz a -1 jumps to the previous instruction if a is not zero)
+-   and then increase its value by 1, leaving register a at 1
+
+So, the function should return:
+
+`{"a":1}`
+
+This kata is based on the Advent of Code 2016 - day 12
+
+### example 2
+
+interpreting
+
+```
+["mov a -10", "mov b a", "inc a", "dec b", "jnz a -2"]
+```
+
+should yield
+
+```
+{ a: 0, b: -20 }
+```
